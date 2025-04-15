@@ -30,7 +30,9 @@
       font-size: 12px;
       margin-top: 20px;
       white-space: pre-wrap;
-      text-align: center;
+      text-align: left; /* Ensure left alignment */
+      line-height: 1.5; /* For better readability */
+      border: 1px solid #ccc; /* Optional border for clarity in the PDF */
     }
     button {
       margin-top: 10px;
@@ -62,7 +64,6 @@
 
   <button onclick="addRow()">Add Item</button>
   <button onclick="generatePreview()">Preview</button>
-  <button onclick="printReceipt()">Print Bill</button>
   <button onclick="downloadPDF()">Download PDF</button>
 
   <datalist id="itemList">
@@ -90,7 +91,7 @@
     function addRow() {
       const tbody = document.querySelector("#itemTable tbody");
       const row = document.createElement("tr");
-      row.innerHTML = `
+      row.innerHTML = ` 
         <td><input type="text" list="itemList" placeholder="Item" oninput="autoFillPrice(this)" /></td>
         <td><input type="number" value="1" min="1" oninput="updateTotalPrice(this)" /></td>
         <td><input type="number" step="0.01" class="unit-price" value="0.00" readonly /></td>
@@ -148,17 +149,6 @@
       document.getElementById("receiptContent").innerText = previewText;
     }
 
-    function printReceipt() {
-      generatePreview();
-      const printContents = document.getElementById("preview").innerHTML;
-      const originalContents = document.body.innerHTML;
-
-      document.body.innerHTML = printContents;
-      window.print();
-      document.body.innerHTML = originalContents;
-      location.reload(); // Refresh
-    }
-
     function downloadPDF() {
       generatePreview();
       const element = document.getElementById("preview");
@@ -167,10 +157,11 @@
         margin: 0.3,
         filename: 'pos-receipt.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
+        html2canvas: { scale: 2, logging: false },  // Enhanced quality of canvas rendering
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
 
+      // Ensure the preview content is rendered with the required style
       html2pdf().set(opt).from(element).save();
     }
 
