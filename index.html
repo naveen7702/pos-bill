@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>POS Bill Generator - Tikka Masala</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: monospace;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+      border-collapse: collapse;
+    }
+    table {
+      width: 100%;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 5px;
+      text-align: left;
+    }
+    .receipt {
+      background: white;
+      padding: 20px;
+      width: 300px;
+      font-size: 12px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+      text-align: center;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      cursor: pointer;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 10px;
+      width: 100px;
+    }
+  </style>
+</head>
+<body>
+  <h2>POS Bill Generator</h2>
+
+  <table id="itemTable">
+    <thead>
+      <tr>
+        <th>Item Name</th>
+        <th>Qty</th>
+        <th>Unit Price</th>
+        <th>Total Price</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <button onclick="addRow()">Add Item</button>
+  <button onclick="generatePreview()">Preview</button>
+  <button onclick="printReceipt()">Print Bill</button>
+  <button onclick="downloadPDF()">Download PDF</button>
+
+  <datalist id="itemList">
+    <option value="Chicken Samosa">
+    <option value="Chicken Pakora">
+    <option value="Veg Biryani">
+    <option value="Mutton Fry piece Biryani">
+    <option value="Mutton Dum Biryani">
+  </datalist>
+
+  <div id="preview" class="receipt">
+    <img src="assets/logo.png" alt="Logo" class="logo" id="receiptLogo">
+    <div id="receiptContent"></div>
+  </div>
+
+  <script>
+    const itemPriceMap = {
+      "Chicken Samosa": 5.99,
+      "Chicken Pakora": 7.49,
+      "Veg Biryani": 8.99,
+      "Mutton Fry piece Biryani": 12.99,
+      "Mutton Dum Biryani": 12.99
+    };
+
+    function addRow() {
+      const tbody = document.querySelector("#itemTable tbody");
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td><input type="text" list="itemList" placeholder="Item" oninput="autoFillPrice(this)" /></td>
+        <td><input type="number" value="1" min="1" oninput="updateTotalPrice(this)" /></td>
+        <td><input type="number" step="0.01" class="unit-price" value="0.00" readonly /></td>
+        <td><input type="number" step="0.01" class="total-price" value="0.00" readonly /></td>
+        <td><button onclick="this.closest('tr').remove()">Remove</button></td>
+      `;
+      tbody.appendChild(row);
+    }
+
+    function autoFillPrice(input) {
+      const itemName = input.value;
+      const row = input.closest("tr");
+      const qtyInput = row.cells[1].querySelector("input");
+      const unitPriceInput = row.cells[2].querySelector("input");
+      const totalPriceInput = row.cells[3].querySelector("input");
+
+      if (itemPriceMap[itemName]) {
+        const unitPrice = itemPriceMap[itemName];
+        unitPriceInput.value = unitPrice.toFixed(2);
+        const qty = parseFloat(qtyInput.value || 1);
+        totalPriceInput.value = (unitPrice * qty).toFixed(2);
+      }
+    }
+
+    function updateTotalPrice(qtyInput) {
+      const row = qtyInput.closest("tr");
+      const unitPrice = parseFloat(row.cells[2].querySelector("input").value || 0);
+      const qty = parseFloat(qtyInput.value || 1);
+      const totalPriceInput = row.cells[3].querySelector("input");
+      totalPriceInput.value = (unitPrice * qty).toFixed(2);
+    }
+
+    function calculateVAT(price) {
+      return (price * 18) / 118;
+    }
+
+    function generatePreview() {
+      const rows = document.querySelectorAll("#itemTable tbody tr");
+      let itemsText = "", vatTotal = 0, totalAmount = 0;
+
+      rows.forEach(row => {
+        const name = row.cells[0].querySelector("input").value;
+        const qty = parseFloat(row.cells[1].querySelector("input").value);
+        const totalPrice = parseFloat(row.cells[3].querySelector("input").value);
+        const vat = calculateVAT(totalPrice);
+        itemsText += `${qty} - ${name.toUpperCase()} @ ${totalPrice.toFixed(2)} EUR (VAT 18%)\nVAT: ${vat.toFixed(2)} EUR\n`;
+        vatTotal += vat;
+        totalAmount += totalPrice;
+      });
+
+      const receiptId = "ORD" + Date.now().toString().slice(-6) + Math.floor(Math.random() * 90 + 10);
+
+      const previewText = `TIKKA MASALA\nBreakfast, Lunch & Dinner\n+356 9953 9777\n\nOrder No: ${receiptId}\nDate/Time Ordered: ${(new Date()).toLocaleString()}\nPayment method: (Pay by Cash)\n\nOrdered:\n----------------------------\n${itemsText}----------------------------\n\nTotal: ${totalAmount.toFixed(2)} EUR\n\nVAT amount: ${vatTotal.toFixed(2)} EUR\n\nSummary of VAT\n18.00% - ${vatTotal.toFixed(2)} EUR\n\nVat No: MT30390604\nReceipt print id: ${receiptId}\n\nTikka Masala\n96, Triq it Tabib J Zammit\nBirkirkara, Malta\nMob: +356 79426411`;
+
+      document.getElementById("receiptContent").innerText = previewText;
+    }
+
+    function printReceipt() {
+      generatePreview();
+      const printContents = document.getElementById("preview").innerHTML;
+      const originalContents = document.body.innerHTML;
+
+      document.body.innerHTML = printContents;
+      window.print();
+      document.body.innerHTML = originalContents;
+      location.reload(); // Refresh
+    }
+
+    function downloadPDF() {
+      generatePreview();
+      const element = document.getElementById("preview");
+
+      const opt = {
+        margin: 0.3,
+        filename: 'pos-receipt.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save();
+    }
+
+    addRow(); // initial item row
+  </script>
+</body>
+</html>
