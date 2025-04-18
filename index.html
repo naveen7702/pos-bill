@@ -3,183 +3,162 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tikka Masala - Premium POS Bill</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>Tikka Masala | Luxe Billing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Roboto&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to right, #f2f2f2, #e6e4ff);
+    /* Global Reset */
+    * {
       margin: 0;
       padding: 0;
-      color: #333;
+      box-sizing: border-box;
     }
 
-    .navbar {
-      background-color: #2c3e50;
-      color: white;
-      padding: 20px;
-      font-size: 1.5rem;
-      text-align: center;
-      letter-spacing: 1px;
-      font-weight: 600;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 40px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     h2 {
-      text-align: center;
-      color: #e87e04;
-      font-size: 2rem;
-      margin-bottom: 20px;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: #f5c518;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 5px #000;
     }
 
-    .controls {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    button {
-      background-color: #8e44ad;
-      color: white;
-      padding: 12px 20px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      margin: 10px;
-      transition: all 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #732d91;
+    .container {
+      background: rgba(0, 0, 0, 0.65);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 1000px;
+      width: 100%;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
-      border-radius: 12px;
-      overflow: hidden;
+      margin-bottom: 25px;
+      color: #fff;
     }
 
     th, td {
-      padding: 14px;
-      text-align: center;
-      border: 1px solid #e0e0e0;
+      padding: 14px 12px;
+      border: 1px solid #444;
+      text-align: left;
     }
 
     th {
-      background-color: #4a69bd;
-      color: white;
-      font-weight: 600;
+      background-color: rgba(245, 197, 24, 0.9);
+      color: #000;
     }
 
-    td input {
-      padding: 8px;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      width: 100%;
-    }
-
-    .receipt {
-      margin-top: 30px;
-      background-color: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-    }
-
-    .final-summary {
-      margin-top: 20px;
-      text-align: right;
-      font-size: 1.1rem;
-      font-weight: 600;
-    }
-
-    .summary-line {
-      margin: 8px 0;
-    }
-
-    .highlight {
-      color: #e87e04;
-      font-size: 1.3rem;
-    }
-
-    .global-discount {
-      max-width: 300px;
-      margin: 0 auto;
+    input {
       padding: 10px;
-      text-align: center;
+      width: 100%;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
     }
 
-    input[type="number"]:focus,
-    input[type="text"]:focus {
-      outline: none;
-      border-color: #8e44ad;
+    input:focus {
+      outline: 2px solid #f5c518;
+    }
+
+    button {
+      background-color: #f5c518;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      margin: 10px 5px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+    }
+
+    button:hover {
+      background-color: #fff;
+      color: #000;
+    }
+
+    .bill-summary {
+      margin-top: 20px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      border-radius: 16px;
+    }
+
+    .bill-summary p {
+      font-size: 1.2rem;
+      margin: 10px 0;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #bbb;
+      font-size: 0.9rem;
+    }
+
+    .gold-text {
+      color: #f5c518;
     }
   </style>
 </head>
 <body>
 
-  <div class="navbar">Tikka Masala - Premium POS</div>
+  <h2>Tikka Masala - Luxe Billing</h2>
 
   <div class="container">
-    <h2>Bill Generator</h2>
-
-    <div class="controls">
-      <button onclick="addRow()">➕ Add Item</button>
-      <button onclick="generatePreview()">📋 Preview Bill</button>
-    </div>
-
-    <div class="global-discount">
-      <label><strong>Global Discount %</strong></label>
-      <input type="number" id="globalDiscount" placeholder="e.g. 10" onchange="applyGlobalDiscount()"/>
-    </div>
-
     <table id="itemTable">
       <thead>
         <tr>
           <th>Item Name</th>
           <th>Qty</th>
-          <th>Unit Price</th>
-          <th>Discount %</th>
-          <th>Total Item Price</th>
+          <th>Unit Price (€)</th>
+          <th>Discount (%)</th>
+          <th>Total Item Price (€)</th>
           <th>Action</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
 
-    <div class="receipt" id="preview">
-      <div id="receiptContent"></div>
+    <div style="text-align: right; margin-bottom: 10px;">
+      <label for="globalDiscount">Global Discount (%)</label>
+      <input type="number" id="globalDiscount" placeholder="e.g. 10" onchange="applyGlobalDiscount()">
     </div>
 
-    <div class="final-summary">
-      <div class="summary-line">Total Amount: <span id="finalPrice">0.00</span> EUR</div>
-      <div class="summary-line">VAT (18%): <span id="vatPrice">0.00</span> EUR</div>
-      <div class="summary-line highlight">Total (incl. VAT): <span id="totalWithVat">0.00</span> EUR</div>
+    <div style="text-align: center;">
+      <button onclick="addRow()">Add Item</button>
+      <button onclick="generateBill()">Generate Bill</button>
+    </div>
+
+    <div class="bill-summary">
+      <p>Total Amount (before VAT): <span id="totalAmount">0.00</span> EUR</p>
+      <p>Total Discount: <span id="totalDiscount">0.00</span> EUR</p>
+      <p>VAT (18%): <span id="vatAmount">0.00</span> EUR</p>
+      <p><strong class="gold-text">Final Total (with VAT): <span id="finalTotal">0.00</span> EUR</strong></p>
     </div>
   </div>
 
-  <datalist id="itemList">
-    <option value="Chicken Samosa">
-    <option value="Chicken Pakora">
-    <option value="Veg Biryani">
-    <option value="Mutton Fry piece Biryani">
-    <option value="Mutton Dum Biryani">
-  </datalist>
+  <div class="footer">
+    &copy; 2025 Tikka Masala. Designed for luxury. Birkirkara, Malta
+  </div>
 
   <script>
-    const itemPriceMap = {
+    const itemPrices = {
       "Chicken Samosa": 5.99,
       "Chicken Pakora": 7.49,
       "Veg Biryani": 8.99,
@@ -191,75 +170,85 @@
       const tbody = document.querySelector("#itemTable tbody");
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td><input type="text" list="itemList" placeholder="Item" oninput="autoFillPrice(this)" /></td>
-        <td><input type="number" value="1" min="1" oninput="recalculateRow(this)" /></td>
-        <td><input type="number" step="0.01" class="unit-price" value="0.00" readonly /></td>
-        <td><input type="number" step="0.01" class="discount" value="0" oninput="recalculateRow(this)" /></td>
-        <td><input type="number" step="0.01" class="total-price" value="0.00" readonly /></td>
-        <td><button onclick="this.closest('tr').remove(); generatePreview()">Remove</button></td>
+        <td><input type="text" list="itemList" placeholder="Item" oninput="autoFillPrice(this)"></td>
+        <td><input type="number" min="1" value="1" onchange="recalculateRow(this)"></td>
+        <td><input type="number" step="0.01" value="0.00" readonly></td>
+        <td><input type="number" step="1" value="0" onchange="recalculateRow(this)"></td>
+        <td><input type="number" step="0.01" value="0.00" readonly></td>
+        <td><button onclick="this.closest('tr').remove(); generateBill();">Remove</button></td>
       `;
       tbody.appendChild(row);
     }
 
     function autoFillPrice(input) {
+      const item = input.value;
       const row = input.closest("tr");
-      const itemName = input.value;
-      const unitPriceInput = row.querySelector(".unit-price");
-
-      if (itemPriceMap[itemName]) {
-        unitPriceInput.value = itemPriceMap[itemName].toFixed(2);
+      const unitPriceInput = row.cells[2].querySelector("input");
+      if (itemPrices[item]) {
+        unitPriceInput.value = itemPrices[item].toFixed(2);
         recalculateRow(input);
       }
     }
 
     function recalculateRow(input) {
       const row = input.closest("tr");
-      const qty = parseFloat(row.cells[1].querySelector("input").value) || 1;
-      const price = parseFloat(row.cells[2].querySelector("input").value) || 0;
-      const discount = parseFloat(row.cells[3].querySelector("input").value) || 0;
-      const discountedPrice = price - (price * discount / 100);
-      const total = qty * discountedPrice;
-      row.cells[4].querySelector("input").value = total.toFixed(2);
-      generatePreview();
+      const qty = parseFloat(row.cells[1].querySelector("input").value || 1);
+      const unitPrice = parseFloat(row.cells[2].querySelector("input").value || 0);
+      const discount = parseFloat(row.cells[3].querySelector("input").value || 0);
+      const totalPriceCell = row.cells[4].querySelector("input");
+
+      const discountedPrice = unitPrice * qty * (1 - discount / 100);
+      totalPriceCell.value = discountedPrice.toFixed(2);
+
+      generateBill();
     }
 
     function applyGlobalDiscount() {
-      const discountValue = parseFloat(document.getElementById("globalDiscount").value) || 0;
+      const globalDiscount = parseFloat(document.getElementById("globalDiscount").value || 0);
       const rows = document.querySelectorAll("#itemTable tbody tr");
+
       rows.forEach(row => {
-        row.querySelector(".discount").value = discountValue;
-        recalculateRow(row.querySelector(".discount"));
+        const discountInput = row.cells[3].querySelector("input");
+        discountInput.value = globalDiscount;
+        recalculateRow(discountInput);
       });
     }
 
-    function calculateVAT(amount) {
-      return (amount * 18) / 100;
-    }
-
-    function generatePreview() {
+    function generateBill() {
       const rows = document.querySelectorAll("#itemTable tbody tr");
-      let content = "", totalAmount = 0, vatTotal = 0;
+      let total = 0;
+      let totalDiscount = 0;
 
       rows.forEach(row => {
-        const name = row.cells[0].querySelector("input").value;
-        const qty = parseFloat(row.cells[1].querySelector("input").value);
-        const price = parseFloat(row.cells[2].querySelector("input").value);
-        const discount = parseFloat(row.cells[3].querySelector("input").value);
-        const totalPrice = parseFloat(row.cells[4].querySelector("input").value);
-        content += `${qty} x ${name.toUpperCase()} @ €${price.toFixed(2)} (-${discount}%) = €${totalPrice.toFixed(2)}\n`;
-        totalAmount += totalPrice;
+        const qty = parseFloat(row.cells[1].querySelector("input").value || 1);
+        const unitPrice = parseFloat(row.cells[2].querySelector("input").value || 0);
+        const discount = parseFloat(row.cells[3].querySelector("input").value || 0);
+        const totalPrice = parseFloat(row.cells[4].querySelector("input").value || 0);
+
+        total += totalPrice;
+        totalDiscount += ((unitPrice * qty) * (discount / 100));
       });
 
-      vatTotal = calculateVAT(totalAmount);
-      const finalTotal = totalAmount + vatTotal;
+      const vat = (total * 18) / 100;
+      const finalTotal = total + vat;
 
-      document.getElementById("receiptContent").innerText = content.trim();
-      document.getElementById("finalPrice").innerText = totalAmount.toFixed(2);
-      document.getElementById("vatPrice").innerText = vatTotal.toFixed(2);
-      document.getElementById("totalWithVat").innerText = finalTotal.toFixed(2);
+      document.getElementById("totalAmount").innerText = total.toFixed(2);
+      document.getElementById("totalDiscount").innerText = totalDiscount.toFixed(2);
+      document.getElementById("vatAmount").innerText = vat.toFixed(2);
+      document.getElementById("finalTotal").innerText = finalTotal.toFixed(2);
     }
 
-    addRow(); // Add one default row on load
+    addRow(); // Init row
   </script>
+
+  <!-- Datalist for autocompletion -->
+  <datalist id="itemList">
+    <option value="Chicken Samosa">
+    <option value="Chicken Pakora">
+    <option value="Veg Biryani">
+    <option value="Mutton Fry piece Biryani">
+    <option value="Mutton Dum Biryani">
+  </datalist>
+
 </body>
 </html>
