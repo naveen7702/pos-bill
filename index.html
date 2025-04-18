@@ -2,253 +2,157 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tikka Masala | Luxe Billing</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Roboto&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tikka Masala Receipt</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* Global Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
-      font-family: 'Roboto', sans-serif;
-      background: url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092') no-repeat center center fixed;
-      background-size: cover;
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: url('https://www.transparenttextures.com/patterns/food.png');
+      background-color: #111;
       color: #fff;
-      min-height: 100vh;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
     }
-
-    h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      color: #f5c518;
-      margin-bottom: 30px;
-      letter-spacing: 1px;
-      text-shadow: 1px 1px 5px #000;
-    }
-
     .container {
-      background: rgba(0, 0, 0, 0.65);
+      max-width: 800px;
+      margin: 50px auto;
+      background: rgba(0, 0, 0, 0.8);
       border-radius: 20px;
-      padding: 30px;
-      max-width: 1000px;
-      width: 100%;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px #ff6f00;
+      padding: 40px;
+      animation: fadeInUp 1s ease-in-out;
     }
-
+    @keyframes fadeInUp {
+      0% { transform: translateY(40px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .logo img {
+      width: 150px;
+      border-radius: 50%;
+    }
+    h1 {
+      text-align: center;
+      font-family: 'Great Vibes', cursive;
+      font-size: 3em;
+      margin-top: 10px;
+      color: #ffcc00;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 25px;
-      color: #fff;
-    }
-
-    th, td {
-      padding: 14px 12px;
-      border: 1px solid #444;
-      text-align: left;
-    }
-
-    th {
-      background-color: rgba(245, 197, 24, 0.9);
-      color: #000;
-    }
-
-    input {
-      padding: 10px;
-      width: 100%;
-      border-radius: 8px;
-      border: none;
-      font-size: 1rem;
-    }
-
-    input:focus {
-      outline: 2px solid #f5c518;
-    }
-
-    button {
-      background-color: #f5c518;
-      color: #000;
-      border: none;
-      border-radius: 10px;
-      padding: 12px 24px;
-      margin: 10px 5px;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: 0.3s ease;
-      box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
-    }
-
-    button:hover {
-      background-color: #fff;
-      color: #000;
-    }
-
-    .bill-summary {
       margin-top: 20px;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 20px;
-      border-radius: 16px;
     }
-
-    .bill-summary p {
-      font-size: 1.2rem;
-      margin: 10px 0;
+    th, td {
+      border: 1px solid #444;
+      padding: 10px;
+      text-align: center;
     }
-
-    .footer {
+    th {
+      background: #222;
+      color: #ffcc00;
+    }
+    .total-section {
+      text-align: right;
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+    .total-section strong {
+      display: block;
+      margin: 5px 0;
+    }
+    .btns {
       text-align: center;
       margin-top: 30px;
-      color: #bbb;
-      font-size: 0.9rem;
     }
-
-    .gold-text {
-      color: #f5c518;
+    .btn {
+      background: #ff6f00;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+      margin: 0 10px;
+      transition: background 0.3s ease;
+    }
+    .btn:hover {
+      background: #ffa040;
+    }
+    .neon-border {
+      border: 2px solid #ff6f00;
+      box-shadow: 0 0 8px #ff6f00;
+      border-radius: 10px;
+      padding: 10px;
+    }
+    @media print {
+      .btns {
+        display: none;
+      }
+      body {
+        background: #fff;
+        color: #000;
+      }
+      .container {
+        box-shadow: none;
+        background: #fff;
+      }
     }
   </style>
 </head>
 <body>
-
-  <h2>Tikka Masala - Luxe Billing</h2>
-
   <div class="container">
-    <table id="itemTable">
+    <div class="logo">
+      <img src="/mnt/data/logo.png" alt="Tikka Masala Logo" />
+      <h1>Tikka Masala</h1>
+    </div>
+    
+    <table>
       <thead>
         <tr>
-          <th>Item Name</th>
-          <th>Qty</th>
-          <th>Unit Price (€)</th>
-          <th>Discount (%)</th>
-          <th>Total Item Price (€)</th>
-          <th>Action</th>
+          <th>S.No</th>
+          <th>Item</th>
+          <th>Type</th>
+          <th>MRP</th>
+          <th>Discount %</th>
+          <th>Final Price</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Paneer Butter Masala</td>
+          <td>Main Course</td>
+          <td>250</td>
+          <td>10%</td>
+          <td>225</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Butter Naan</td>
+          <td>Bread</td>
+          <td>40</td>
+          <td>0%</td>
+          <td>40</td>
+        </tr>
+      </tbody>
     </table>
 
-    <div style="text-align: right; margin-bottom: 10px;">
-      <label for="globalDiscount">Global Discount (%)</label>
-      <input type="number" id="globalDiscount" placeholder="e.g. 10" onchange="applyGlobalDiscount()">
+    <div class="total-section">
+      <strong>Total Discount: ₹25</strong>
+      <strong>VAT (5%): ₹13.25</strong>
+      <strong>Grand Total: ₹278.25</strong>
     </div>
 
-    <div style="text-align: center;">
-      <button onclick="addRow()">Add Item</button>
-      <button onclick="generateBill()">Generate Bill</button>
-    </div>
-
-    <div class="bill-summary">
-      <p>Total Amount (before VAT): <span id="totalAmount">0.00</span> EUR</p>
-      <p>Total Discount: <span id="totalDiscount">0.00</span> EUR</p>
-      <p>VAT (18%): <span id="vatAmount">0.00</span> EUR</p>
-      <p><strong class="gold-text">Final Total (with VAT): <span id="finalTotal">0.00</span> EUR</strong></p>
+    <div class="btns">
+      <button class="btn" onclick="window.print()">Print Receipt</button>
+      <button class="btn" onclick="alert('Payment Processed')">Pay Now</button>
     </div>
   </div>
-
-  <div class="footer">
-    &copy; 2025 Tikka Masala. Designed for luxury. Birkirkara, Malta
-  </div>
-
-  <script>
-    const itemPrices = {
-      "Chicken Samosa": 5.99,
-      "Chicken Pakora": 7.49,
-      "Veg Biryani": 8.99,
-      "Mutton Fry piece Biryani": 12.99,
-      "Mutton Dum Biryani": 12.99
-    };
-
-    function addRow() {
-      const tbody = document.querySelector("#itemTable tbody");
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td><input type="text" list="itemList" placeholder="Item" oninput="autoFillPrice(this)"></td>
-        <td><input type="number" min="1" value="1" onchange="recalculateRow(this)"></td>
-        <td><input type="number" step="0.01" value="0.00" readonly></td>
-        <td><input type="number" step="1" value="0" onchange="recalculateRow(this)"></td>
-        <td><input type="number" step="0.01" value="0.00" readonly></td>
-        <td><button onclick="this.closest('tr').remove(); generateBill();">Remove</button></td>
-      `;
-      tbody.appendChild(row);
-    }
-
-    function autoFillPrice(input) {
-      const item = input.value;
-      const row = input.closest("tr");
-      const unitPriceInput = row.cells[2].querySelector("input");
-      if (itemPrices[item]) {
-        unitPriceInput.value = itemPrices[item].toFixed(2);
-        recalculateRow(input);
-      }
-    }
-
-    function recalculateRow(input) {
-      const row = input.closest("tr");
-      const qty = parseFloat(row.cells[1].querySelector("input").value || 1);
-      const unitPrice = parseFloat(row.cells[2].querySelector("input").value || 0);
-      const discount = parseFloat(row.cells[3].querySelector("input").value || 0);
-      const totalPriceCell = row.cells[4].querySelector("input");
-
-      const discountedPrice = unitPrice * qty * (1 - discount / 100);
-      totalPriceCell.value = discountedPrice.toFixed(2);
-
-      generateBill();
-    }
-
-    function applyGlobalDiscount() {
-      const globalDiscount = parseFloat(document.getElementById("globalDiscount").value || 0);
-      const rows = document.querySelectorAll("#itemTable tbody tr");
-
-      rows.forEach(row => {
-        const discountInput = row.cells[3].querySelector("input");
-        discountInput.value = globalDiscount;
-        recalculateRow(discountInput);
-      });
-    }
-
-    function generateBill() {
-      const rows = document.querySelectorAll("#itemTable tbody tr");
-      let total = 0;
-      let totalDiscount = 0;
-
-      rows.forEach(row => {
-        const qty = parseFloat(row.cells[1].querySelector("input").value || 1);
-        const unitPrice = parseFloat(row.cells[2].querySelector("input").value || 0);
-        const discount = parseFloat(row.cells[3].querySelector("input").value || 0);
-        const totalPrice = parseFloat(row.cells[4].querySelector("input").value || 0);
-
-        total += totalPrice;
-        totalDiscount += ((unitPrice * qty) * (discount / 100));
-      });
-
-      const vat = (total * 18) / 100;
-      const finalTotal = total + vat;
-
-      document.getElementById("totalAmount").innerText = total.toFixed(2);
-      document.getElementById("totalDiscount").innerText = totalDiscount.toFixed(2);
-      document.getElementById("vatAmount").innerText = vat.toFixed(2);
-      document.getElementById("finalTotal").innerText = finalTotal.toFixed(2);
-    }
-
-    addRow(); // Init row
-  </script>
-
-  <!-- Datalist for autocompletion -->
-  <datalist id="itemList">
-    <option value="Chicken Samosa">
-    <option value="Chicken Pakora">
-    <option value="Veg Biryani">
-    <option value="Mutton Fry piece Biryani">
-    <option value="Mutton Dum Biryani">
-  </datalist>
-
 </body>
 </html>
