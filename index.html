@@ -6,13 +6,8 @@
   <title>POS Bill Generator - Tikka Masala</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
-    /* General Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    /* Basic Styling (same as before) */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Arial', sans-serif;
       background-color: #f8f9fa;
@@ -20,15 +15,12 @@
       color: #343a40;
       line-height: 1.4;
     }
-
     h2 {
       text-align: center;
       font-size: 1.8rem;
       color: #e87e04;
       margin-bottom: 20px;
     }
-
-    /* Table Styles */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -36,19 +28,16 @@
       border-radius: 8px;
       overflow: hidden;
     }
-
     th, td {
       padding: 12px;
       text-align: left;
       border: 1px solid #ddd;
     }
-
     th {
       background-color: #007bff;
       color: white;
       font-weight: bold;
     }
-
     td input {
       width: 100%;
       padding: 8px;
@@ -56,11 +45,6 @@
       border: 1px solid #ccc;
       font-size: 1rem;
     }
-
-    td input:focus {
-      border: 1px solid #007bff;
-    }
-
     td button {
       background-color: #ff4747;
       color: white;
@@ -68,14 +52,7 @@
       border-radius: 5px;
       padding: 6px 10px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
     }
-
-    td button:hover {
-      background-color: #ff2d2d;
-    }
-
-    /* Buttons */
     button {
       background-color: #28a745;
       color: white;
@@ -84,16 +61,8 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin: 20px auto;
-      display: block;
+      margin: 20px 10px 10px 0;
     }
-
-    button:hover {
-      background-color: #218838;
-    }
-
-    /* Receipt Section */
     .receipt {
       background: white;
       padding: 20px;
@@ -105,37 +74,21 @@
       box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
       border-radius: 12px;
     }
-
     .logo {
       display: block;
       margin: 0 auto 15px;
       width: 100px;
     }
-
-    /* Input Fields */
-    input[type="text"], input[type="number"] {
-      font-size: 1.1rem;
-      padding: 12px;
-      border-radius: 8px;
-      border: 2px solid #ccc;
-      margin: 8px 0;
-      width: 100%;
+    .summary {
+      margin-top: 20px;
+      font-size: 1rem;
+      text-align: right;
     }
-
-    input[type="text"]:focus, input[type="number"]:focus {
-      border-color: #007bff;
-      outline: none;
+    .summary p {
+      margin: 5px 0;
     }
-
-    /* Card for Final Price */
-    .final-price-card {
-      margin-top: 15px;
-      font-size: 1.1rem;
-      color: #333;
-      padding: 15px;
-      background-color: #e87e04;
-      color: white;
-      border-radius: 8px;
+    input[type="number"]:read-only {
+      background-color: #eee;
     }
   </style>
 </head>
@@ -143,20 +96,21 @@
 
   <h2>TIKKA MASALA Bill Generator</h2>
 
-  <div class="card">
-    <table id="itemTable">
-      <thead>
-        <tr>
-          <th>Item Name</th>
-          <th>Qty</th>
-          <th>Unit Price</th>
-          <th>Total Item Price</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+  <label><strong>Global Discount (%)</strong>: <input type="number" id="globalDiscount" value="0" min="0" max="100" oninput="applyGlobalDiscount()"></label>
+
+  <table id="itemTable">
+    <thead>
+      <tr>
+        <th>Item Name</th>
+        <th>Qty</th>
+        <th>Unit Price</th>
+        <th>Discount (%)</th>
+        <th>Total Item Price</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
   <button onclick="addRow()">Add Item</button>
   <button onclick="generatePreview()">Preview</button>
@@ -170,105 +124,132 @@
     <option value="Mutton Dum Biryani">
   </datalist>
 
+  <div class="summary">
+    <p><strong>Total Before Discount:</strong> <span id="totalBeforeDiscount">0.00</span> EUR</p>
+    <p><strong>Total Discount:</strong> <span id="totalDiscount">0.00</span> EUR</p>
+    <p><strong>Total After Discount:</strong> <span id="totalAfterDiscount">0.00</span> EUR</p>
+    <p><strong>VAT (18%):</strong> <span id="vatValue">0.00</span> EUR</p>
+    <p><strong><u>Final Total:</u></strong> <span id="finalTotal">0.00</span> EUR</p>
+  </div>
+
   <div id="preview" class="receipt">
     <img src="assets/logo.png" alt="Logo" class="logo" id="receiptLogo">
     <div id="receiptContent"></div>
   </div>
 
-  <div class="final-price-card">
-    <p>Total Price: <span id="finalPrice">0.00</span> EUR</p>
-    <p>VAT Price: <span id="vatPrice">0.00</span> EUR</p>
-  </div>
+<script>
+const itemPriceMap = {
+  "Chicken Samosa": 5.99,
+  "Chicken Pakora": 7.49,
+  "Veg Biryani": 8.99,
+  "Mutton Fry piece Biryani": 12.99,
+  "Mutton Dum Biryani": 12.99
+};
 
-  <script>
-    const itemPriceMap = {
-      "Chicken Samosa": 5.99,
-      "Chicken Pakora": 7.49,
-      "Veg Biryani": 8.99,
-      "Mutton Fry piece Biryani": 12.99,
-      "Mutton Dum Biryani": 12.99
-    };
+function addRow() {
+  const tbody = document.querySelector("#itemTable tbody");
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td><input type="text" list="itemList" placeholder="Item" oninput="autoFillPrice(this)" /></td>
+    <td><input type="number" value="1" min="1" oninput="recalculateRow(this)" /></td>
+    <td><input type="number" step="0.01" class="unit-price" value="0.00" readonly /></td>
+    <td><input type="number" value="0" min="0" max="100" class="discount" oninput="recalculateRow(this)" /></td>
+    <td><input type="number" step="0.01" class="total-price" value="0.00" readonly /></td>
+    <td><button onclick="this.closest('tr').remove(); recalculateTotals()">Remove</button></td>
+  `;
+  tbody.appendChild(row);
+}
 
-    function addRow() {
-      const tbody = document.querySelector("#itemTable tbody");
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td><input type="text" list="itemList" placeholder="Item" oninput="autoFillPrice(this)" /></td>
-        <td><input type="number" value="1" min="1" oninput="updateTotalPrice(this)" /></td>
-        <td><input type="number" step="0.01" class="unit-price" value="0.00" readonly /></td>
-        <td><input type="number" step="0.01" class="total-price" value="0.00" readonly /></td>
-        <td><button onclick="this.closest('tr').remove()">Remove</button></td>
-      `;
-      tbody.appendChild(row);
-    }
+function autoFillPrice(input) {
+  const itemName = input.value;
+  const row = input.closest("tr");
+  const qty = parseFloat(row.cells[1].querySelector("input").value);
+  const unitPriceInput = row.cells[2].querySelector("input");
+  if (itemPriceMap[itemName]) {
+    unitPriceInput.value = itemPriceMap[itemName].toFixed(2);
+  }
+  recalculateRow(input);
+}
 
-    function autoFillPrice(input) {
-      const itemName = input.value;
-      const row = input.closest("tr");
-      const qtyInput = row.cells[1].querySelector("input");
-      const unitPriceInput = row.cells[2].querySelector("input");
-      const totalPriceInput = row.cells[3].querySelector("input");
+function recalculateRow(inputElement) {
+  const row = inputElement.closest("tr");
+  const qty = parseFloat(row.cells[1].querySelector("input").value || 1);
+  const unitPrice = parseFloat(row.cells[2].querySelector("input").value || 0);
+  const discountPercent = parseFloat(row.cells[3].querySelector("input").value || 0);
+  const totalBeforeDiscount = unitPrice * qty;
+  const discounted = totalBeforeDiscount * (1 - discountPercent / 100);
+  row.cells[4].querySelector("input").value = discounted.toFixed(2);
+  recalculateTotals();
+}
 
-      if (itemPriceMap[itemName]) {
-        const unitPrice = itemPriceMap[itemName];
-        unitPriceInput.value = unitPrice.toFixed(2);
-        const qty = parseFloat(qtyInput.value || 1);
-        totalPriceInput.value = (unitPrice * qty).toFixed(2);
-      }
-    }
+function applyGlobalDiscount() {
+  const globalDiscount = parseFloat(document.getElementById("globalDiscount").value || 0);
+  document.querySelectorAll("#itemTable tbody tr").forEach(row => {
+    row.cells[3].querySelector("input").value = globalDiscount;
+    recalculateRow(row.cells[3].querySelector("input"));
+  });
+}
 
-    function updateTotalPrice(qtyInput) {
-      const row = qtyInput.closest("tr");
-      const unitPrice = parseFloat(row.cells[2].querySelector("input").value || 0);
-      const qty = parseFloat(qtyInput.value || 1);
-      const totalPriceInput = row.cells[3].querySelector("input");
-      totalPriceInput.value = (unitPrice * qty).toFixed(2);
-    }
+function recalculateTotals() {
+  let totalBefore = 0, totalAfter = 0;
+  document.querySelectorAll("#itemTable tbody tr").forEach(row => {
+    const qty = parseFloat(row.cells[1].querySelector("input").value || 1);
+    const unitPrice = parseFloat(row.cells[2].querySelector("input").value || 0);
+    const totalItemPrice = parseFloat(row.cells[4].querySelector("input").value || 0);
+    totalBefore += unitPrice * qty;
+    totalAfter += totalItemPrice;
+  });
+  const totalDiscount = totalBefore - totalAfter;
+  const vat = (totalAfter * 18) / 100;
+  const final = totalAfter + vat;
 
-    function calculateVAT(price) {
-      return (price * 18) / 118;
-    }
+  document.getElementById("totalBeforeDiscount").innerText = totalBefore.toFixed(2);
+  document.getElementById("totalDiscount").innerText = totalDiscount.toFixed(2);
+  document.getElementById("totalAfterDiscount").innerText = totalAfter.toFixed(2);
+  document.getElementById("vatValue").innerText = vat.toFixed(2);
+  document.getElementById("finalTotal").innerText = final.toFixed(2);
+}
 
-    function generatePreview() {
-      const rows = document.querySelectorAll("#itemTable tbody tr");
-      let itemsText = "", vatTotal = 0, totalAmount = 0;
+function generatePreview() {
+  recalculateTotals();
+  const rows = document.querySelectorAll("#itemTable tbody tr");
+  let receipt = '', vatTotal = 0;
 
-      rows.forEach(row => {
-        const name = row.cells[0].querySelector("input").value;
-        const qty = parseFloat(row.cells[1].querySelector("input").value);
-        const totalPrice = parseFloat(row.cells[3].querySelector("input").value);
-        const vat = calculateVAT(totalPrice);
-        itemsText += `${qty} - ${name.toUpperCase()} @ ${totalPrice.toFixed(2)} EUR (VAT 18%)\nVAT: ${vat.toFixed(2)} EUR\n`;
-        vatTotal += vat;
-        totalAmount += totalPrice;
-      });
+  rows.forEach(row => {
+    const name = row.cells[0].querySelector("input").value;
+    const qty = parseFloat(row.cells[1].querySelector("input").value);
+    const unitPrice = parseFloat(row.cells[2].querySelector("input").value);
+    const discount = parseFloat(row.cells[3].querySelector("input").value);
+    const total = parseFloat(row.cells[4].querySelector("input").value);
+    const vat = (total * 18) / 100;
+    receipt += `${qty} x ${name} @ ${unitPrice.toFixed(2)} - ${discount}% Off\nItem Total: ${total.toFixed(2)} EUR\nVAT: ${vat.toFixed(2)} EUR\n\n`;
+    vatTotal += vat;
+  });
 
-      const receiptId = "ORD" + Date.now().toString().slice(-6) + Math.floor(Math.random() * 90 + 10);
+  const receiptId = "ORD" + Date.now().toString().slice(-6) + Math.floor(Math.random() * 90 + 10);
+  const total = parseFloat(document.getElementById("totalAfterDiscount").innerText);
+  const final = parseFloat(document.getElementById("finalTotal").innerText);
 
-      const previewText = `TIKKA MASALA\nBreakfast, Lunch & Dinner\n+356 9953 9777\n\nOrder No: ${receiptId}\nDate/Time Ordered: ${(new Date()).toLocaleString()}\nPayment method: (Pay by Cash)\n\nOrdered:\n----------------------------\n${itemsText}----------------------------\n\nTotal: ${totalAmount.toFixed(2)} EUR\n\nVAT amount: ${vatTotal.toFixed(2)} EUR\n\nSummary of VAT\n18.00% - ${vatTotal.toFixed(2)} EUR\n\nVat No: MT30390604\nReceipt print id: ${receiptId}\n\nTikka Masala\n96, Triq it Tabib J Zammit\nBirkirkara, Malta\nMob: +356 79426411`;
+  const text = `TIKKA MASALA\n+356 9953 9777\nOrder ID: ${receiptId}\nDate: ${(new Date()).toLocaleString()}\n\n${receipt}----------------------------\nTotal (after discount): ${total.toFixed(2)} EUR\nVAT: ${vatTotal.toFixed(2)} EUR\nFinal Amount: ${final.toFixed(2)} EUR\n\nThank you!\nTikka Masala, Malta`;
 
-      document.getElementById("receiptContent").innerText = previewText;
-      document.getElementById("finalPrice").innerText = totalAmount.toFixed(2);
-      document.getElementById("vatPrice").innerText = vatTotal.toFixed(2);
-    }
+  document.getElementById("receiptContent").innerText = text;
+}
 
-    function downloadPDF() {
-      generatePreview();
-      const element = document.getElementById("preview");
+function downloadPDF() {
+  generatePreview();
+  const element = document.getElementById("preview");
+  const opt = {
+    margin: 0.3,
+    filename: 'pos-receipt.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(element).save();
+}
 
-      const opt = {
-        margin: 0.3,
-        filename: 'pos-receipt.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-      };
-
-      html2pdf().set(opt).from(element).save();
-    }
-
-    addRow(); // initial item row
-  </script>
+addRow(); // initial row
+</script>
 
 </body>
 </html>
