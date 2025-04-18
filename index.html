@@ -1,158 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tikka Masala Receipt</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: url('https://www.transparenttextures.com/patterns/food.png');
-      background-color: #111;
+      padding: 0;
+      font-family: 'Playfair Display', serif;
+      background: linear-gradient(145deg, #2c3e50, #34495e);
       color: #fff;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .receipt-container {
+      max-width: 380px;
+      margin: 20px auto;
       padding: 20px;
-      overflow-x: hidden;
+      background-color: #1f1f1f;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(255, 165, 0, 0.6);
     }
-    .container {
-      max-width: 800px;
-      margin: 50px auto;
-      background: rgba(0, 0, 0, 0.8);
-      border-radius: 20px;
-      box-shadow: 0 0 20px #ff6f00;
-      padding: 40px;
-      animation: fadeInUp 1s ease-in-out;
-    }
-    @keyframes fadeInUp {
-      0% { transform: translateY(40px); opacity: 0; }
-      100% { transform: translateY(0); opacity: 1; }
-    }
+
     .logo {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
     }
+
     .logo img {
-      width: 150px;
+      width: 120px;
       border-radius: 50%;
     }
-    h1 {
+
+    h2 {
       text-align: center;
-      font-family: 'Great Vibes', cursive;
-      font-size: 3em;
-      margin-top: 10px;
-      color: #ffcc00;
+      margin-bottom: 10px;
+      font-family: 'Orbitron', sans-serif;
+      color: #ffa500;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-bottom: 10px;
     }
+
     th, td {
-      border: 1px solid #444;
-      padding: 10px;
-      text-align: center;
+      padding: 8px 4px;
+      font-size: 13px;
+      text-align: left;
+      border-bottom: 1px solid #444;
     }
+
     th {
-      background: #222;
-      color: #ffcc00;
+      color: #ffa500;
     }
-    .total-section {
+
+    .totals {
       text-align: right;
-      margin-top: 20px;
-      font-size: 1.2em;
+      font-weight: bold;
+      margin-top: 10px;
     }
-    .total-section strong {
+
+    .totals span {
       display: block;
-      margin: 5px 0;
+      margin-top: 4px;
     }
-    .btns {
+
+    .actions {
       text-align: center;
-      margin-top: 30px;
+      margin-top: 20px;
     }
+
     .btn {
-      background: #ff6f00;
-      color: #fff;
+      background-color: #ffa500;
+      color: #000;
+      padding: 8px 16px;
+      margin: 4px;
       border: none;
-      padding: 12px 24px;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 1em;
-      margin: 0 10px;
+      font-weight: bold;
       transition: background 0.3s ease;
     }
+
     .btn:hover {
-      background: #ffa040;
+      background-color: #ffcc66;
     }
-    .neon-border {
-      border: 2px solid #ff6f00;
-      box-shadow: 0 0 8px #ff6f00;
-      border-radius: 10px;
-      padding: 10px;
-    }
+
     @media print {
-      .btns {
-        display: none;
-      }
-      body {
+      body, html {
         background: #fff;
         color: #000;
+        font-size: 12px;
       }
-      .container {
+
+      .receipt-container {
+        max-width: 72mm;
         box-shadow: none;
-        background: #fff;
+        border-radius: 0;
+      }
+
+      .btn, .actions {
+        display: none;
+      }
+
+      .logo img {
+        width: 60px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="receipt-container" id="receipt">
     <div class="logo">
-      <img src="/mnt/data/logo.png" alt="Tikka Masala Logo" />
-      <h1>Tikka Masala</h1>
+      <img src="./logo.png" alt="Tikka Masala Logo">
     </div>
-    
-    <table>
+    <h2>TIKKA MASALA</h2>
+    <p style="text-align:center; font-size:12px;">Indian Bar & Restaurant</p>
+
+    <table id="itemsTable">
       <thead>
         <tr>
-          <th>S.No</th>
           <th>Item</th>
-          <th>Type</th>
-          <th>MRP</th>
-          <th>Discount %</th>
-          <th>Final Price</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Disc (%)</th>
+          <th>Total</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>Paneer Butter Masala</td>
-          <td>Main Course</td>
-          <td>250</td>
-          <td>10%</td>
-          <td>225</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Butter Naan</td>
-          <td>Bread</td>
-          <td>40</td>
-          <td>0%</td>
-          <td>40</td>
-        </tr>
+      <tbody id="itemRows">
+        <!-- JS will populate -->
       </tbody>
     </table>
 
-    <div class="total-section">
-      <strong>Total Discount: ₹25</strong>
-      <strong>VAT (5%): ₹13.25</strong>
-      <strong>Grand Total: ₹278.25</strong>
-    </div>
-
-    <div class="btns">
-      <button class="btn" onclick="window.print()">Print Receipt</button>
-      <button class="btn" onclick="alert('Payment Processed')">Pay Now</button>
+    <div class="totals">
+      <span>Subtotal: ₹<span id="subtotal">0.00</span></span>
+      <span>Discount: ₹<span id="discountTotal">0.00</span></span>
+      <span>VAT (5%): ₹<span id="vat">0.00</span></span>
+      <span><strong>Grand Total: ₹<span id="grandTotal">0.00</span></strong></span>
     </div>
   </div>
+
+  <div class="actions">
+    <button class="btn" onclick="addRow()">Add Item</button>
+    <button class="btn" onclick="window.print()">Print Receipt</button>
+  </div>
+
+  <script>
+    let items = [
+      { name: 'Butter Chicken', price: 250, qty: 1, discount: 0 },
+      { name: 'Naan', price: 40, qty: 2, discount: 0 },
+    ];
+
+    function addRow() {
+      items.push({ name: 'New Item', price: 0, qty: 1, discount: 0 });
+      renderItems();
+    }
+
+    function renderItems() {
+      const tbody = document.getElementById('itemRows');
+      tbody.innerHTML = '';
+      let subtotal = 0, totalDiscount = 0;
+
+      items.forEach((item, idx) => {
+        const totalBeforeDiscount = item.price * item.qty;
+        const discountAmt = totalBeforeDiscount * (item.discount / 100);
+        const finalTotal = totalBeforeDiscount - discountAmt;
+
+        subtotal += finalTotal;
+        totalDiscount += discountAmt;
+
+        const row = `
+          <tr>
+            <td><input value="${item.name}" onchange="updateItem(${idx}, 'name', this.value)"></td>
+            <td><input type="number" value="${item.price}" onchange="updateItem(${idx}, 'price', this.value)"></td>
+            <td><input type="number" value="${item.qty}" onchange="updateItem(${idx}, 'qty', this.value)"></td>
+            <td><input type="number" value="${item.discount}" onchange="updateItem(${idx}, 'discount', this.value)"></td>
+            <td>₹${finalTotal.toFixed(2)}</td>
+          </tr>
+        `;
+        tbody.innerHTML += row;
+      });
+
+      const vat = subtotal * 0.05;
+      const grandTotal = subtotal + vat;
+
+      document.getElementById('subtotal').innerText = subtotal.toFixed(2);
+      document.getElementById('discountTotal').innerText = totalDiscount.toFixed(2);
+      document.getElementById('vat').innerText = vat.toFixed(2);
+      document.getElementById('grandTotal').innerText = grandTotal.toFixed(2);
+    }
+
+    function updateItem(index, field, value) {
+      if (field === 'price' || field === 'qty' || field === 'discount') {
+        value = parseFloat(value);
+      }
+      items[index][field] = value;
+      renderItems();
+    }
+
+    renderItems();
+  </script>
 </body>
 </html>
