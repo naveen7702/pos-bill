@@ -46,6 +46,22 @@
       color: #ffa500;
     }
 
+    .datetime {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+
+    .datetime input {
+      background: none;
+      border: none;
+      border-bottom: 1px dashed #ffa500;
+      color: #ffa500;
+      font-size: 12px;
+      text-align: center;
+      width: 160px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
@@ -115,6 +131,11 @@
       .logo img {
         width: 60px;
       }
+
+      .datetime input {
+        border: none;
+        pointer-events: none;
+      }
     }
   </style>
 </head>
@@ -125,6 +146,11 @@
     </div>
     <h2>TIKKA MASALA</h2>
     <p style="text-align:center; font-size:12px;">Indian Bar & Restaurant</p>
+
+    <div class="datetime">
+      Date & Time:
+      <input id="receiptDate" value="2025-04-21 20:30">
+    </div>
 
     <table id="itemsTable">
       <thead>
